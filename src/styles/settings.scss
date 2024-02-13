@@ -1,0 +1,11 @@
+@forward 'vuetify/settings' with (
+  $border-radius-root: 10px,
+  $text-field-border-radius: 16px,
+  $button-text-transform: cappitalize,
+
+  $field-border-width: 2px,
+  $stepper-header-elevation: 0,
+  $stepper-border-radius: 16px,
+
+  $stepper-window-margin: 0.5rem,
+);
