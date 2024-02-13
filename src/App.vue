@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #F3F7FA">
     <BankrotForm />
   </v-app>
 </template>
