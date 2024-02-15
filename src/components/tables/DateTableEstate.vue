@@ -61,7 +61,7 @@
                         variant="outlined"
                         v-bind="field"
                         :error-messages="errors"
-                        label="Цена"
+                        label="Цена, ₽"
                         color="primary"
                         v-maska:[options.sum]
                         :base-color="meta.valid && meta.validated ? 'secondary' : ''"
@@ -145,7 +145,7 @@ export default {
         preProcess: val => val.replace(/\D/g, ''),
         postProcess: val => {
           if (val.length) {
-            return val.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'
+            return val.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
           } else {
             return ''
           }
@@ -156,7 +156,7 @@ export default {
     dialogDelete: false,
     headers: [
       {title: 'Вид имущества', key: 'type', sortable: false},
-      {title: 'Цена', key: 'price', sortable: false},
+      {title: 'Цена, ₽', key: 'price', sortable: false},
       {title: '', key: 'actions', sortable: false},
     ],
     list: [],

@@ -144,7 +144,7 @@ export default {
           preProcess: val => val.replace(/\D/g, ''),
           postProcess: val => {
             if (val.length) {
-              return val.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'
+              return val.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             } else {
               return ''
             }
@@ -153,7 +153,7 @@ export default {
       },
       form: {
         form_id: '',
-        step: 1,
+        step: 3,
       },
       items: {
         family_status_items: ['Женат/ Замужем', 'Холост/ Не замужем', 'Разведен/ Разведена'],
@@ -293,7 +293,7 @@ export default {
             },
             {
               component: 'v-text-field',
-              label: 'Уровень дохода (зарплата/ пенсия)',
+              label: 'Уровень дохода (зарплата/ пенсия), ₽',
               type: 'text',
               variant: "outlined",
               maska: 'sum',
@@ -348,13 +348,13 @@ export default {
             {
               component: 'DateTableEstate',
               label: 'Совместное имущество',
-              model: 'estateItems',
+              model: 'estate_items',
               items: []
             },
             {
               component: 'DateTableSale',
               label: 'Продажа движимого/недвижимого имущества',
-              model: 'saleItems',
+              model: 'sale_items',
               items: []
             }
           ]
@@ -371,11 +371,6 @@ export default {
     }
   },
   watch: {
-    'form.family_status'(val) {
-      if (val === 'Женат/ Замужем') {
-
-      }
-    },
     'form.no_children'(val) {
       this.disabled.children = val
     },
@@ -412,6 +407,9 @@ export default {
     async next(step, validate) {
       let valid_data = await validate()
       if (valid_data.valid) {
+
+        this.form.phone = this.form.phone.replace(/[-() ]/g, '')
+
         this.sendForm(this.form)
         if (step < 4) {
           this.form.step++
