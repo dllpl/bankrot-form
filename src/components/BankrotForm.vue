@@ -173,7 +173,7 @@ export default {
       },
       form: {
         form_id: '',
-        step: 4,
+        step: 1,
       },
       items: {
         family_status_items: ['Женат/ Замужем', 'Холост/ Не замужем', 'Разведен/ Разведена'],
