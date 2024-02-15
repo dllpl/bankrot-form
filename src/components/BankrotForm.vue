@@ -436,6 +436,7 @@ export default {
         }
         if (step === 4) {
           this.showFinal = true
+          Cookies.remove('form_id')
         }
       }
     },
