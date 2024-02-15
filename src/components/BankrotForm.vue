@@ -1,83 +1,102 @@
 <template>
-  <v-stepper hide-actions :model-value="form.step">
-    <v-stepper-header>
-      <v-stepper-item
-        color="primary"
-        v-for="(item, i) in stepper"
-        :title="item.title"
-        :value="i + 1"
-      ></v-stepper-item>
-    </v-stepper-header>
+  <div>
+    <v-stepper
+      hide-actions
+      :model-value="form.step"
+      v-if="!showFinal"
+    >
+      <v-stepper-header>
+        <v-stepper-item
+          color="primary"
+          v-for="(item, i) in stepper"
+          :title="item.title"
+          :value="i + 1"
+        ></v-stepper-item>
+      </v-stepper-header>
 
-    <v-stepper-window>
-      <v-stepper-window-item
-        v-for="(item, i) in stepper"
-        :value="i + 1"
-      >
-        <Form v-slot="{ validate, setValues }" class="bankrot__form">
-          <v-row
-            v-for="(item, i) in item.fields"
-            :key="i"
-            dense
-          >
-            <v-col :md="item?.additional ? 6 : 12" sm="12" cols="12">
-              <Field
-                v-slot="{ field, errors, meta, handleChange}"
-                :rules="item.validate_rules"
-                :name="`form_${item.model}`"
-                v-model.trim="form[item.model]"
-                :type="item.type"
-              >
-                <component
-                  :is="item.component"
-                  :base-color="meta.valid && meta.validated ? 'secondary' : ''"
-                  :items="item?.items ? items[item.items] : ''"
-                  :label="item.label"
-                  :type="item.type"
-                  :variant="item.variant"
-                  v-bind="field"
-                  :error-messages="errors"
-                  v-maska:[options[item.maska]]
-                  :disabled="disabled[item.model]"
-                  color="primary"
-                  @input="onInput(form[item.model], item.label, item?.items)"
-                  @updateFromChildren="(val) => {form[item.model] = val; handleChange(val, false)}"
-                  auto-select-first
-                  return-object
-                ></component>
-              </Field>
-            </v-col>
-            <template
-              v-if="item?.additional"
-              v-for="(item, i) in item.additional"
+      <v-stepper-window>
+        <v-stepper-window-item
+          v-for="(item, i) in stepper"
+          :value="i + 1"
+        >
+          <Form v-slot="{ validate, setValues }" class="bankrot__form">
+            <v-row
+              v-for="(item, i) in item.fields"
+              :key="i"
+              dense
             >
-              <v-col md="6" sm="12" cols="12">
-                <component
-                  v-model="form[item.model]"
+              <v-col :md="item?.additional ? 6 : 12" sm="12" cols="12">
+                <Field
+                  v-slot="{ field, errors, meta, handleChange}"
+                  :rules="item.validate_rules"
                   :name="`form_${item.model}`"
+                  v-model.trim="form[item.model]"
                   :type="item.type"
-                  :is="item.component"
-                  :label="item.label"
-                  :disabled="disabled[item.model]"
-                  :variant="item.variant"
-                  v-maska:[options[item.maska]]
-                  color="primary"
-                  @input="onInput(form[item.model], item.label)"
-                ></component>
+                >
+                  <component
+                    :is="item.component"
+                    :base-color="meta.valid && meta.validated ? 'secondary' : ''"
+                    :items="item?.items ? items[item.items] : ''"
+                    :label="item.label"
+                    :type="item.type"
+                    :variant="item.variant"
+                    v-bind="field"
+                    :error-messages="errors"
+                    v-maska:[options[item.maska]]
+                    :disabled="disabled[item.model]"
+                    color="primary"
+                    @input="onInput(form[item.model], item.label, item?.items)"
+                    @updateFromChildren="(val) => {form[item.model] = val; handleChange(val, false)}"
+                    auto-select-first
+                    return-object
+                  ></component>
+                </Field>
               </v-col>
-            </template>
-          </v-row>
-          <v-row justify="space-between" align="center" class="px-2">
-            <v-btn @click="prev(form.step)" variant="flat" :disabled="form.step === 1">Назад</v-btn>
-            <v-btn color="primary" variant="flat" @click="next(form.step, validate)" :disabled="false">{{
-                nextText
-              }}
-            </v-btn>
-          </v-row>
-        </Form>
-      </v-stepper-window-item>
-    </v-stepper-window>
-  </v-stepper>
+              <template
+                v-if="item?.additional"
+                v-for="(item, i) in item.additional"
+              >
+                <v-col md="6" sm="12" cols="12">
+                  <component
+                    v-model="form[item.model]"
+                    :name="`form_${item.model}`"
+                    :type="item.type"
+                    :is="item.component"
+                    :label="item.label"
+                    :disabled="disabled[item.model]"
+                    :variant="item.variant"
+                    v-maska:[options[item.maska]]
+                    color="primary"
+                    @input="onInput(form[item.model], item.label)"
+                  ></component>
+                </v-col>
+              </template>
+            </v-row>
+            <v-row justify="space-between" align="center" class="px-2">
+              <v-btn @click="prev(form.step)" variant="flat" :disabled="form.step === 1">Назад</v-btn>
+              <v-btn color="primary" variant="flat" @click="next(form.step, validate)" :disabled="false">{{
+                  nextText
+                }}
+              </v-btn>
+            </v-row>
+          </Form>
+        </v-stepper-window-item>
+      </v-stepper-window>
+    </v-stepper>
+    <v-card v-else
+            class="mx-auto mt-3"
+            width="400"
+            prepend-icon="mdi-check-circle-outline"
+            color="success"
+    >
+        <template v-slot:title>
+          Ваша заявки принята
+        </template>
+        <v-card-text>
+          Мы свяжемся с вами!
+        </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -111,6 +130,7 @@ export default {
   },
   data() {
     return {
+      showFinal: false,
       options: {
         date: {
           mask: '##.##.####',
@@ -153,7 +173,7 @@ export default {
       },
       form: {
         form_id: '',
-        step: 4 ,
+        step: 4,
       },
       items: {
         family_status_items: ['Женат/ Замужем', 'Холост/ Не замужем', 'Разведен/ Разведена'],
@@ -413,6 +433,9 @@ export default {
         this.sendForm(this.form)
         if (step < 4) {
           this.form.step++
+        }
+        if (step === 4) {
+
         }
       }
     },
