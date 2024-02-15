@@ -61,6 +61,7 @@
                     v-model="form[item.model]"
                     :name="`form_${item.model}`"
                     :type="item.type"
+                    :items="item?.items ? items[item.items] : ''"
                     :is="item.component"
                     :label="item.label"
                     :disabled="disabled[item.model]"
@@ -173,7 +174,7 @@ export default {
       },
       form: {
         form_id: '',
-        step: 1,
+        step: 3,
       },
       items: {
         family_status_items: ['Женат/ Замужем', 'Холост/ Не замужем', 'Разведен/ Разведена'],
@@ -181,6 +182,7 @@ export default {
         debt_sum_items: ['До 300 000 руб.', 'До 500 000 руб.', 'Более 500 000 руб.', 'Затрудняюсь ответить'],
         delay_items: ['Да', 'Нет'],
         criminal_record_items: ['Да', 'Нет'],
+        delay_sum_items: ['1-3','4-6','7-12', 'Более года']
       },
       disabled: {
         patronymic: false,
@@ -340,12 +342,13 @@ export default {
               additional: [
                 //TODO выпадающий список срока (1-3,4-6,7-12, более года) - срок просрочки
                 {
-                  component: 'v-text-field',
+                  component: 'v-select',
                   type: 'text',
                   label: 'Сумма',
                   maska: 'sum',
                   variant: "outlined",
                   model: 'delay_sum',
+                  items: 'delay_sum_items',
                   validate_rules: 'required_if:form_delay,Да',
                 }
               ],
