@@ -11,7 +11,7 @@ export const requestHelper = {
       })
     },
     sendForm(data) {
-      return axios.post(import.meta.env.VITE_API_URL_TEST, data, {
+      return axios.post(import.meta.env.VITE_API_URL, data, {
         headers: {"Accept": "application/json",},
       })
     }
