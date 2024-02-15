@@ -435,7 +435,7 @@ export default {
           this.form.step++
         }
         if (step === 4) {
-
+          this.showFinal = true
         }
       }
     },
