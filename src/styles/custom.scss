@@ -17,4 +17,9 @@
 //  overflow-x: hidden !important;
 //}
 
+.v-overlay__content:not(.v-dialog--fullscreen) {
+  top: 0;
+  position: absolute ;
+}
+
 
