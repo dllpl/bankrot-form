@@ -372,7 +372,7 @@ export default {
   },
   watch: {
     'form.no_children'(val) {
-      this.disabled.children = val
+      this.disabled.children = null
     },
     'form.children'(val) {
       this.disabled.no_children = !!val
@@ -381,7 +381,7 @@ export default {
       this.disabled.no_patronymic = !!val;
     },
     'form.no_patronymic'(val) {
-      this.disabled.patronymic = val
+      this.disabled.patronymic = null
     },
     'form.region'(val) {
       if (val && val.length > 1) {
