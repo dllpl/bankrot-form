@@ -94,7 +94,7 @@
           Ваша заявки принята
         </template>
         <v-card-text>
-          Мы свяжемся с вами!
+          <v-btn @click="clearAndBack">Отправить новую форму</v-btn>
         </v-card-text>
     </v-card>
   </div>
@@ -131,7 +131,7 @@ export default {
   },
   data() {
     return {
-      showFinal: false,
+      showFinal: true,
       options: {
         date: {
           mask: '##.##.####',
@@ -449,8 +449,6 @@ export default {
       this.form.step--
     },
     async onInput(value, label, items_dadata = null) {
-
-
       if (label === 'Фамилия' || label === 'Имя' || label === 'Отчество') {
         let body = {query: value, count: 3, parts: ''}
         switch (label) {
@@ -473,17 +471,27 @@ export default {
         })
       }
     },
+    clearAndBack() {
+      this.showFinal = false
+      this.form = {
+        form_id: '',
+        step: 1,
+      }
+      this.cookiesInit()
+    },
+    cookiesInit() {
+      let form_id = Cookies.get('form_id')
+      if (form_id) {
+        this.form.form_id = form_id
+      } else {
+        form_id = uuidv4()
+        Cookies.set('form_id', form_id, {expires: 1 / 24})
+        this.form.form_id = form_id
+      }
+    }
   },
   mounted() {
-    let form_id = Cookies.get('form_id')
-    if (form_id) {
-      this.form.form_id = form_id
-    } else {
-      form_id = uuidv4()
-      Cookies.set('form_id', form_id, {expires: 1 / 24})
-      this.form.form_id = form_id
-    }
-
+      this.cookiesInit()
   }
 }
 </script>
