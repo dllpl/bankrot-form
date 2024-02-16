@@ -131,7 +131,7 @@ export default {
   },
   data() {
     return {
-      showFinal: true,
+      showFinal: false,
       options: {
         date: {
           mask: '##.##.####',
