@@ -29,10 +29,9 @@
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
-
               <v-card-text>
-                <v-container>
-                  <v-row>
+                <v-row dense>
+                  <v-col sm="6" cols="12">
                     <Field
                       v-slot="{ field, errors, meta}"
                       rules="required"
@@ -45,12 +44,24 @@
                         variant="outlined"
                         label="Вид имущества"
                         color="primary"
-                        :items="['Движимое', 'Недвижимое']"
+                        :items="type_items"
                         :base-color="meta.valid && meta.validated ? 'secondary' : ''"
-                      ></v-select>
+                        item-title="icon"
+                        item-value="value"
+                      >
+                        <template #item="{ props, item }">
+                          <v-list-item v-bind="props" :title>
+                            <v-icon>mdi-{{ item.raw.icon }}</v-icon>
+                          </v-list-item>
+                        </template>
+
+                        <template #selection="{ item }">
+                          <v-icon>mdi-{{ item.raw.icon }}</v-icon>
+                        </template>
+                      </v-select>
                     </Field>
-                  </v-row>
-                  <v-row>
+                  </v-col>
+                  <v-col sm="6" cols="12">
                     <Field
                       v-slot="{ field, errors, meta}"
                       rules="required"
@@ -68,8 +79,8 @@
                       >
                       </v-text-field>
                     </Field>
-                  </v-row>
-                </v-container>
+                  </v-col>
+                </v-row>
               </v-card-text>
 
               <v-card-actions>
@@ -154,6 +165,7 @@ export default {
     },
     dialog: false,
     dialogDelete: false,
+    type_items: [{icon: 'car-hatchback', value: 'Движимое'}, {icon: 'home-city', value: 'Недвижимое'}],
     headers: [
       {title: 'Вид имущества', key: 'type', sortable: false},
       {title: 'Цена, ₽', key: 'price', sortable: false},

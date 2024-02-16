@@ -177,12 +177,12 @@ export default {
         step: 1,
       },
       items: {
-        family_status_items: ['Женат/ Замужем', 'Холост/ Не замужем', 'Разведен/ Разведена'],
+        family_status_items: ['Женат/Замужем', 'Холост/Не замужем', 'Разведен/Разведена'],
         work_status_items: ['Работа в найме', 'Безработный', 'Индивидуальный предприниматель/ самозанятый', 'Пенсионер'],
         debt_sum_items: ['До 300 000 руб.', 'До 500 000 руб.', 'Более 500 000 руб.', 'Затрудняюсь ответить'],
         delay_items: ['Да', 'Нет'],
         criminal_record_items: ['Да', 'Нет'],
-        delay_sum_items: ['1-3','4-6','7-12', 'Более года']
+        delay_sum_items: ['1-3 мес.','4-6 мес.','7-12 мес.', 'Более года']
       },
       disabled: {
         patronymic: false,
@@ -340,11 +340,10 @@ export default {
               items: 'delay_items',
               validate_rules: 'required',
               additional: [
-                //TODO выпадающий список срока (1-3,4-6,7-12, более года) - срок просрочки
                 {
                   component: 'v-select',
                   type: 'text',
-                  label: 'Сумма',
+                  label: 'Срок просрочки',
                   maska: 'sum',
                   variant: "outlined",
                   model: 'delay_sum',
@@ -370,7 +369,7 @@ export default {
           fields: [
             {
               component: 'DateTableEstate',
-              label: 'Совместное имущество',
+              label: 'Имущество',
               model: 'estate_items',
               items: []
             },
@@ -394,6 +393,9 @@ export default {
     }
   },
   watch: {
+    'form.family_status'(val) {
+      this.stepper[3].fields[1].label = val === 'Женат/Замужем' ? 'Совместное имущество' : 'Имущество'
+    },
     'form.no_children'(val) {
       this.disabled.children = null
     },
