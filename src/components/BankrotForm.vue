@@ -49,6 +49,8 @@
                     @updateFromChildren="(val) => {form[item.model] = val; handleChange(val, false)}"
                     auto-select-first
                     return-object
+                    @focus="onFocus(item)"
+                    @blur="onBlur(item)"
                   ></component>
                 </Field>
               </v-col>
@@ -90,12 +92,12 @@
             prepend-icon="mdi-check-circle-outline"
             color="success"
     >
-        <template v-slot:title>
-          Ваша заявки принята
-        </template>
-        <v-card-text>
-          <v-btn @click="clearAndBack">Отправить новую форму</v-btn>
-        </v-card-text>
+      <template v-slot:title>
+        Ваша заявка принята
+      </template>
+      <v-card-text>
+        <v-btn @click="clearAndBack">Отправить новую форму</v-btn>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -174,7 +176,7 @@ export default {
       },
       form: {
         form_id: '',
-        step: 1,
+        step: 4,
       },
       items: {
         family_status_items: ['Женат/Замужем', 'Холост/Не замужем', 'Разведен/Разведена'],
@@ -182,7 +184,7 @@ export default {
         debt_sum_items: ['До 300 000 руб.', 'До 500 000 руб.', 'Более 500 000 руб.', 'Затрудняюсь ответить'],
         delay_items: ['Да', 'Нет'],
         criminal_record_items: ['Да', 'Нет'],
-        delay_sum_items: ['1-3 мес.','4-6 мес.','7-12 мес.', 'Более года']
+        delay_sum_items: ['1-3 мес.', '4-6 мес.', '7-12 мес.', 'Более года']
       },
       disabled: {
         patronymic: false,
@@ -281,7 +283,7 @@ export default {
             {
               component: 'v-text-field',
               type: 'text',
-              label: 'Дети (до 18 лет) ',
+              label: 'Дети (до 18 лет) - укажите количество',
               model: 'children',
               maska: 'children',
               variant: "outlined",
@@ -375,7 +377,7 @@ export default {
             },
             {
               component: 'DateTableSale',
-              label: 'Продажа движимого/недвижимого имущества',
+              label: 'Сделки купли-продажи имущества за последние 3 года',
               model: 'sale_items',
               items: []
             }
@@ -394,7 +396,7 @@ export default {
   },
   watch: {
     'form.family_status'(val) {
-      this.stepper[3].fields[1].label = val === 'Женат/Замужем' ? 'Совместное имущество' : 'Имущество'
+      this.stepper[3].fields[1].label = val === 'Женат/Замужем' ? 'Сделки купли-продажи совместного имущества за последние 3 года' : 'Сделки купли-продажи имущества за последние 3 года'
     },
     'form.no_children'(val) {
       this.disabled.children = null
@@ -429,6 +431,16 @@ export default {
     }
   },
   methods: {
+    onFocus(item) {
+      if (item.model === "children") {
+        this.stepper[1].fields[3].label = 'Дети (до 18 лет)'
+      }
+    },
+    onBlur(item) {
+      if (item.model === "children") {
+        this.stepper[1].fields[3].label = 'Дети (до 18 лет) - укажите количество'
+      }
+    },
     async next(step, validate) {
       let valid_data = await validate()
       if (valid_data.valid) {
@@ -491,7 +503,14 @@ export default {
     }
   },
   mounted() {
-      this.cookiesInit()
+    this.cookiesInit()
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const managerId = urlParams.get('manager_id');
+
+    console.log(managerId)
+
   }
 }
 </script>

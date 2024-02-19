@@ -38,27 +38,27 @@
                       name="type"
                       v-model="editedItem.type"
                     >
-                      <v-select
-                        v-bind="field"
-                        :error-messages="errors"
-                        variant="outlined"
-                        label="Вид имущества"
-                        color="primary"
-                        :items="type_items"
-                        :base-color="meta.valid && meta.validated ? 'secondary' : ''"
-                        item-title="icon"
-                        item-value="value"
-                      >
-                        <template #item="{ props, item }">
-                          <v-list-item v-bind="props" :title>
-                            <v-icon>mdi-{{ item.raw.icon }}</v-icon>
-                          </v-list-item>
-                        </template>
+                      <v-row justify="start" class="h-100">
+                        <v-col v-for="(item, i) in type_items" align="start" cols="6" :key="i"
+                               :title="item.value"
+                        >
+                          <div class="border-md rounded h-100 d-flex justify-center align-center cursor-pointer pa-2"
+                               :class="[editedItem.type === item.value ? 'border-secondary' : '']"
+                               @click="editedItem.type = item.value"
+                          >
+                            <v-icon
+                              :icon="item.icon"
+                              size="xx-large"
+                              :color="editedItem.type === item.value ? 'secondary' : 'primary'"
+                            >
+                            </v-icon>
+                          </div>
 
-                        <template #selection="{ item }">
-                          <v-icon>mdi-{{ item.raw.icon }}</v-icon>
-                        </template>
-                      </v-select>
+                        </v-col>
+                      </v-row>
+                      <div class="v-input__details">
+                        <error-message name="type" class="text-error">{{errors[0]}}</error-message>
+                      </div>
                     </Field>
                   </v-col>
                   <v-col sm="6" cols="12">
@@ -165,7 +165,7 @@ export default {
     },
     dialog: false,
     dialogDelete: false,
-    type_items: [{icon: 'car-hatchback', value: 'Движимое'}, {icon: 'home-city', value: 'Недвижимое'}],
+    type_items: [{icon: 'mdi-car-hatchback', value: 'Движимое'}, {icon: 'mdi-home-city', value: 'Недвижимое'}],
     headers: [
       {title: 'Вид имущества', key: 'type', sortable: false},
       {title: 'Цена, ₽', key: 'price', sortable: false},

@@ -32,34 +32,34 @@
 
               <v-card-text>
                 <v-row dense>
-                  <v-col sm="6" cols="12">
+                  <v-col sm="6" cols="12" class="v-text-field">
                     <Field
                       v-slot="{ field, errors, meta}"
                       rules="required"
                       name="type"
                       v-model="editedItem.type"
                     >
-                      <v-select
-                        v-bind="field"
-                        :error-messages="errors"
-                        variant="outlined"
-                        label="Вид имущества"
-                        color="primary"
-                        :items="type_items"
-                        :base-color="meta.valid && meta.validated ? 'secondary' : ''"
-                        item-title="icon"
-                        item-value="value"
-                      >
-                        <template #item="{ props, item }">
-                          <v-list-item v-bind="props" :title>
-                            <v-icon>mdi-{{ item.raw.icon }}</v-icon>
-                          </v-list-item>
-                        </template>
+                      <v-row justify="start" class="h-100">
+                        <v-col v-for="(item, i) in type_items" align="start" cols="6" :key="i"
+                               :title="item.value"
+                        >
+                          <div class="border-md rounded h-100 d-flex justify-center align-center cursor-pointer pa-2"
+                               :class="[editedItem.type === item.value ? 'border-secondary' : '']"
+                               @click="editedItem.type = item.value"
+                          >
+                            <v-icon
+                              :icon="item.icon"
+                              size="xx-large"
+                              :color="editedItem.type === item.value ? 'secondary' : 'primary'"
+                            >
+                            </v-icon>
+                          </div>
 
-                        <template #selection="{ item }">
-                          <v-icon>mdi-{{ item.raw.icon }}</v-icon>
-                        </template>
-                      </v-select>
+                        </v-col>
+                      </v-row>
+                      <div class="v-input__details">
+                          <error-message name="type" class="text-error">{{errors[0]}}</error-message>
+                      </div>
                     </Field>
                   </v-col>
                   <v-col sm="6" cols="12">
@@ -193,8 +193,10 @@ export default {
     },
     dialog: false,
     dialogDelete: false,
-    year_items: ['текущий год', 'текущий год -1', 'текущий год -2', 'текущий год -3', 'ранее, чем текущий год -3'],
-    type_items: [{icon: 'car-hatchback', value: 'Движимое'}, {icon: 'home-city', value: 'Недвижимое'}],
+    //TODO создать для сайта банкрот функцию парсинга меток и сохранения в тбл. bankrotMonolitUtm
+    //TODO добавить identifier сотрудника
+    type_items: [{icon: 'mdi-car-hatchback', value: 'Движимое'}, {icon: 'mdi-home-city', value: 'Недвижимое'}],
+    clicked_type: null,
     headers: [
       {title: 'Вид имущества', key: 'type', sortable: false},
       {title: 'Год продажи', key: 'year', sortable: false},
@@ -219,6 +221,16 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Добавить' : 'Редактировать'
     },
+    year_items() {
+      let current_date = new Date()
+      let current_year = current_date.getFullYear()
+      let years = []
+      for (let i = 0; i < 4; i++) {
+        years.push(String(current_year - i))
+      }
+      years.push('ранее, чем ' + (current_year - 3))
+      return years
+    }
   },
 
   watch: {
@@ -237,7 +249,11 @@ export default {
   },
 
   methods: {
+    clickToType(item) {
+      if (item.value === 'Недвижимое') {
 
+      }
+    },
     editItem(item) {
       this.editedIndex = this.list.indexOf(item)
       this.editedItem = Object.assign({}, item)
