@@ -120,7 +120,7 @@ import {requestHelper} from "@/mixins/requestHelper"
 
 //other
 import {vMaska} from 'maska'
-import {v4 as uuidv4} from 'uuid'
+import {v4 as uuidv4, validate as uuidValidate} from 'uuid'
 import Cookies from 'js-cookie'
 
 export default {
@@ -175,8 +175,9 @@ export default {
         }
       },
       form: {
-        form_id: '',
         step: 1,
+        form_id: null,
+        manager_id: null,
       },
       items: {
         family_status_items: ['Женат/Замужем', 'Холост/Не замужем', 'Разведен/Разведена'],
@@ -500,17 +501,18 @@ export default {
         Cookies.set('form_id', form_id, {expires: 1 / 24})
         this.form.form_id = form_id
       }
+    },
+    managerInit() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const managerId = urlParams.get('manager_id');
+      if (managerId && uuidValidate(managerId)) {
+        this.form.manager_id = managerId
+      }
     }
   },
   mounted() {
     this.cookiesInit()
-
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const managerId = urlParams.get('manager_id');
-
-    console.log(managerId)
-
+    this.managerInit()
   }
 }
 </script>
